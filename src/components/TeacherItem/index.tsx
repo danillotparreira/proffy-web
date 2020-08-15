@@ -1,44 +1,56 @@
 import React from 'react';
 
-import whatsappIcon from '../../assets/images/icons/whatsapp.svg'
+import whatsappIcon from '../../assets/images/icons/whatsapp.svg';
 
-import './style.css'
+import './style.css';
+import api from '../../services/api';
+export interface Teacher {
+  id: number;
+  subject: string;
+  cost: number;
+  name: string;
+  avatar: string;
+  whatsapp: string;
+  bio: string;
+}
+interface TeacherItemProps {
+  classes: Teacher;
+}
 
-function TeacherItem() {
+const TeacherItem: React.FC<TeacherItemProps> = ({ classes }) => {
+  function createNewConnection() {
+    api.post('connections', {
+      user_id: classes.id,
+    });
+  }
   return (
     <article className="teacher-item">
       <header>
-        <img
-          src="https://image.flaticon.com/icons/svg/2128/2128744.svg"
-          alt="Proffy Quimica"
-        />
+        <img src={classes.avatar} alt={classes.name} />
         <div>
-          <strong>Químico Louco</strong>
-          <span>Química</span>
+          <strong>{classes.name}</strong>
+          <span>{classes.subject}</span>
         </div>
       </header>
 
-      <p>
-        Entusiasta das melhores tecnologias de química avançada.
-        <br />
-        <br />
-        Apaixonado por explodir coisas em laboratório e por mudar a vida das
-        pessoas através de experiências. Mais de 200.000 pessoas já passaram por
-        uma das minhas explosões.
-      </p>
+      <p>{classes.bio}</p>
 
       <footer>
         <p>
-          Preço/hora
-          <strong>R$ 80,00</strong>
+          Preço/Hora
+          <strong>R$ {classes.cost},00</strong>
         </p>
-        <button type="button">
+        <a
+          target="_black"
+          onClick={createNewConnection}
+          href={`https://wa.me/+55${classes.whatsapp}`}
+        >
           <img src={whatsappIcon} alt="Whatsapp" />
           Entrar em contato
-        </button>
+        </a>
       </footer>
     </article>
   );
-}
+};
 
 export default TeacherItem;
